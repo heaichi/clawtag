@@ -47,7 +47,9 @@ git push -u origin feat/your-feature
 # 然后在 GitHub 上开 PR
 ```
 
+- **`main` 已开启分支保护**：改动必须通过 PR，且需要 1 人审批；禁止强推与删除分支（仓库管理员可绕过）。
 - `main` 保持随时可发布：PR 合并前请确保 CI 级别的两条命令（analyze/test）在本地通过。
+- 可选：装提交钩子（提交后自动 push）——`powershell -ExecutionPolicy Bypass -File scripts\install_git_hooks.ps1`。
 - 提交信息建议 `feat(模块): …` / `fix(模块): …` / `docs: …`，用中文描述即可。
 - 大改动请先开 issue 说清动机与范围，避免白做。
 
