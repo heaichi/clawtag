@@ -1,3 +1,4 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -9,6 +10,7 @@ import '../core/theme/theme_provider.dart';
 import '../core/utils/error_utils.dart';
 import '../core/utils/snack.dart';
 import '../core/utils/version.dart';
+import '../services/backup_service.dart';
 import '../services/permission_service.dart';
 import 'deleted_items_screen.dart';
 
@@ -174,10 +176,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
           _Tile(
             icon: Icons.backup_outlined,
             title: '导出数据',
-            // 不能写成『备份』：当前只有导出、没有导入/恢复实现，
-            // 否则用户会把它当备份，换机/卸载后无法还原（docs/代码审计待办.md P1-13）。
-            subtitle: '导出为 JSON（暂不支持导入）',
+            subtitle: '导出备份包（含照片视频，可用于换机导入）',
             onTap: () => _exportData(context),
+          ),
+          _Tile(
+            icon: Icons.restore_page_outlined,
+            title: '导入数据',
+            subtitle: '从备份包恢复（不会覆盖现有数据）',
+            onTap: () => _importData(context, onImported: _loadStats),
           ),
           _Tile(
             icon: Icons.restore_from_trash_outlined,
@@ -410,14 +416,14 @@ Future<void> _exportData(BuildContext context) async {
     ),
   );
   try {
-    final path = await AppDatabase.exportToJson();
+    final zip = await buildBackupZip();
     if (context.mounted) {
       Navigator.pop(context);
       await SharePlus.instance.share(
         ShareParams(
-          files: [XFile(path)],
-          subject: '爪札数据导出',
-          text: '爪札 App 数据导出（JSON，当前版本暂不支持导入）',
+          files: [XFile(zip.path)],
+          subject: '爪札数据备份',
+          text: '爪札备份包（含照片与视频）。在新设备上用「我的 → 导入数据」恢复。',
         ),
       );
     }
@@ -425,6 +431,81 @@ Future<void> _exportData(BuildContext context) async {
     if (context.mounted) {
       Navigator.pop(context);
       showError(context, '导出失败: $e');
+    }
+  }
+}
+
+/// 导入备份：选文件 → 二次确认 → 进度弹窗 → 如实回执。
+///
+/// 支持新格式 `.zip`（`data.json` + `media/`，照片视频一起恢复）
+/// 与旧版本导出的纯 `.json`（文字数据可恢复，媒体缺失会如实计数）。
+Future<void> _importData(
+  BuildContext context, {
+  VoidCallback? onImported,
+}) async {
+  // file_picker 13 起是静态 API，返回 List<PlatformFile>（取消选择时为空列表）
+  List<PlatformFile> picked;
+  try {
+    picked = await FilePicker.pickFiles(type: FileType.any);
+  } catch (e) {
+    if (context.mounted) showError(context, '打开文件选择器失败: $e');
+    return;
+  }
+  final path = picked.isEmpty ? null : picked.first.path;
+  if (path == null || !context.mounted) return;
+
+  final confirmed = await showDialog<bool>(
+    context: context,
+    builder: (ctx) => AlertDialog(
+      title: const Text('导入备份'),
+      content: const Text(
+        '备份里的宠物、爪札、提醒会被**追加**到现有数据中，不会覆盖或删除任何东西。\n\n'
+        '标签会按名称合并；照片视频会一起复制到本机。',
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(ctx, false),
+          child: const Text('取消'),
+        ),
+        TextButton(
+          onPressed: () => Navigator.pop(ctx, true),
+          child: const Text('开始导入'),
+        ),
+      ],
+    ),
+  );
+  if (confirmed != true || !context.mounted) return;
+
+  showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder: (_) => const PopScope(
+      canPop: false,
+      child: Center(child: CircularProgressIndicator()),
+    ),
+  );
+  try {
+    final summary = await importBackupFile(path);
+    if (!context.mounted) return;
+    Navigator.pop(context);
+    onImported?.call();
+    showDialog<void>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('导入完成'),
+        content: Text(formatImportSummary(summary)),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('好'),
+          ),
+        ],
+      ),
+    );
+  } catch (e) {
+    if (context.mounted) {
+      Navigator.pop(context);
+      showError(context, '导入失败: $e');
     }
   }
 }

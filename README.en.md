@@ -43,7 +43,7 @@ Everything you delete lands in **Recently deleted**, where it can be restored.
 | 💊 **Medication courses** | One medicine, several doses a day, across as many days as the prescription says |
 | 🗑 **Recently deleted** | Every deletion is reversible — reminders, entries and pets |
 | 🎬 **Built-in player** | Videos play inline, full screen, portrait or landscape |
-| 📤 **Data export** | Write everything out to a JSON file you own |
+| 📤 **Backup & restore** | Export one archive with your records and media, then import it on a new device |
 | 🌙 **Dark mode** | Follows the system, or pick light or dark yourself |
 
 ## How it works

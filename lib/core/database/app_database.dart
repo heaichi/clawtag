@@ -742,8 +742,7 @@ class AppDatabase {
   static Future<Database> _init() async {
     // 有测试覆盖时不要调用 getDatabasesPath()（它会去创建真实目录）。
     final overridePath = debugDatabasePathOverride;
-    final path =
-        overridePath ?? p.join(await getDatabasesPath(), 'clawtag.db');
+    final path = overridePath ?? p.join(await getDatabasesPath(), 'clawtag.db');
     return openDatabase(
       path,
       version: VERSION,
@@ -2939,11 +2938,20 @@ class AppDatabase {
   // ========================================
   // Export / Import
   // ========================================
-  static Future<String> exportToJson() async {
+  /// 备份格式版本：导入时用于判断兼容性（只增，不兼容时导入侧给出提示）。
+  static const backupFormatVersion = 1;
+
+  /// 备份用的数据地图（**只含业务表**）。
+  ///
+  /// - 不含已废弃的游戏表（原导出会带上 10 张死表，见审计 P2-7）；
+  /// - 只读数据库、不写文件：落盘/打包交给 `services/backup_service.dart`；
+  /// - `media` 路径仍是设备绝对路径，打包/导入时由服务层重写。
+  static Future<Map<String, dynamic>> buildExportMap() async {
     final db = await instance;
-    final data = {
+    return {
+      'format_version': backupFormatVersion,
+      'schema_version': VERSION,
       'exported_at': DateTime.now().toIso8601String(),
-      'version': VERSION,
       'pets': await db.query('pets'),
       'diaries': await db.query('diaries'),
       'diary_images': await db.query('diary_images'),
@@ -2951,25 +2959,215 @@ class AppDatabase {
       'diary_tags': await db.query('diary_tags'),
       'reminders': await db.query('reminders'),
       'reminder_instances': await db.query('reminder_instances'),
-      // V11 module registry
-      'module_registry': await db.query('module_registry'),
-      // V4 game tables
-      'virtual_pets': await db.query('virtual_pets'),
-      'game_currencies': await db.query('game_currencies'),
-      'equipment': await db.query('equipment'),
-      'adventure_log': await db.query('adventure_log'),
-      'achievement_progress': await db.query('achievement_progress'),
-      'reward_log': await db.query('reward_log'),
-      'checkin_history': await db.query('checkin_history'),
-      // V5 爪游 tables
-      'caught_pets': await db.query('caught_pets'),
-      'pokedex_entries': await db.query('pokedex_entries'),
-      'gym_badges': await db.query('gym_badges'),
-      'poke_balls': await db.query('poke_balls'),
-      // V7 game save
-      'game_saves': await db.query('game_saves'),
     };
+  }
 
+  /// 导入结果统计（用于给用户如实的回执）。
+  static Future<ImportSummary> importExportMap(
+    Map<String, dynamic> data, {
+    required Future<String?> Function(String archivePath) resolveMedia,
+  }) async {
+    final db = await instance;
+    final pets = _rowsOf(data['pets']);
+    final diaries = _rowsOf(data['diaries']);
+    final images = _rowsOf(data['diary_images']);
+    final tags = _rowsOf(data['tags']);
+    final diaryTags = _rowsOf(data['diary_tags']);
+    final reminders = _rowsOf(data['reminders']);
+    final instances = _rowsOf(data['reminder_instances']);
+
+    // 1) 媒体先落盘：IO 慢，放在事务外，避免长时间占写锁。
+    final mediaPaths = <String>{
+      for (final r in images)
+        if ((r['local_path'] as String?)?.trim().isNotEmpty ?? false)
+          (r['local_path'] as String).trim(),
+      for (final r in pets)
+        if ((r['avatar_path'] as String?)?.trim().isNotEmpty ?? false)
+          (r['avatar_path'] as String).trim(),
+    };
+    final mediaMap = <String, String?>{};
+    var skippedMedia = 0;
+    for (final old in mediaPaths) {
+      String? resolved;
+      try {
+        resolved = await resolveMedia(old);
+      } catch (e) {
+        debugPrint('导入媒体失败（跳过）: $old → $e');
+      }
+      mediaMap[old] = resolved;
+      if (resolved == null) skippedMedia++;
+    }
+
+    final petIdMap = <String, String>{};
+    final diaryIdMap = <String, String>{};
+    final tagIdMap = <String, String>{};
+    final reminderIdMap = <String, String>{};
+    var nPets = 0,
+        nDiaries = 0,
+        nImages = 0,
+        nTags = 0,
+        nReminders = 0,
+        nInstances = 0;
+
+    await db.transaction((txn) async {
+      // 各表的实际列（跨版本导入时，旧/新多出来的键一律丢弃，缺的走默认值）
+      final cols = <String, Set<String>>{};
+      for (final t in const [
+        'pets',
+        'diaries',
+        'diary_images',
+        'tags',
+        'diary_tags',
+        'reminders',
+        'reminder_instances',
+      ]) {
+        cols[t] = (await txn.rawQuery(
+          'PRAGMA table_info($t)',
+        )).map((r) => r['name'] as String).toSet();
+      }
+
+      final existingTags = <String, String>{
+        for (final r in await txn.query('tags', columns: ['id', 'name']))
+          (r['name'] as String): r['id'] as String,
+      };
+
+      for (final r in pets) {
+        if (_isDeletedRow(r)) continue;
+        final oldId = r['id'] as String;
+        final newId = uuid();
+        petIdMap[oldId] = newId;
+        final avatar = (r['avatar_path'] as String?)?.trim();
+        await txn.insert('pets', {
+          ..._pick(r, cols['pets']!),
+          'id': newId,
+          'avatar_path': (avatar == null || avatar.isEmpty)
+              ? null
+              : mediaMap[avatar],
+          'is_deleted': 0,
+        });
+        nPets++;
+      }
+
+      for (final r in diaries) {
+        if (_isDeletedRow(r)) continue;
+        final newPetId = petIdMap[r['pet_id']];
+        if (newPetId == null) continue;
+        final newId = uuid();
+        diaryIdMap[r['id'] as String] = newId;
+        await txn.insert('diaries', {
+          ..._pick(r, cols['diaries']!),
+          'id': newId,
+          'pet_id': newPetId,
+          'is_deleted': 0,
+        });
+        nDiaries++;
+      }
+
+      for (final r in images) {
+        final newDiaryId = diaryIdMap[r['diary_id']];
+        if (newDiaryId == null) continue;
+        final oldPath = (r['local_path'] as String?)?.trim();
+        final newPath = oldPath == null || oldPath.isEmpty
+            ? null
+            : mediaMap[oldPath];
+        // 文件没落地就不留这条图片记录：留着一个指向不存在文件的路径只会显示裂图
+        if (newPath == null) continue;
+        await txn.insert('diary_images', {
+          ..._pick(r, cols['diary_images']!),
+          'id': uuid(),
+          'diary_id': newDiaryId,
+          'local_path': newPath,
+        });
+        nImages++;
+      }
+
+      for (final r in tags) {
+        final oldId = r['id'] as String;
+        final name = r['name'] as String;
+        final existing = existingTags[name];
+        if (existing != null) {
+          tagIdMap[oldId] = existing;
+          continue;
+        }
+        final newId = uuid();
+        tagIdMap[oldId] = newId;
+        existingTags[name] = newId;
+        await txn.insert('tags', {..._pick(r, cols['tags']!), 'id': newId});
+        nTags++;
+      }
+
+      for (final r in diaryTags) {
+        final d = diaryIdMap[r['diary_id']];
+        final t = tagIdMap[r['tag_id']];
+        if (d == null || t == null) continue;
+        await txn.insert('diary_tags', {
+          'diary_id': d,
+          'tag_id': t,
+        }, conflictAlgorithm: ConflictAlgorithm.ignore);
+      }
+
+      for (final r in reminders) {
+        if (_isDeletedRow(r)) continue;
+        final newPetId = petIdMap[r['pet_id']];
+        if (newPetId == null) continue;
+        final newId = uuid();
+        reminderIdMap[r['id'] as String] = newId;
+        await txn.insert('reminders', {
+          ..._pick(r, cols['reminders']!),
+          'id': newId,
+          'pet_id': newPetId,
+          'is_deleted': 0,
+        });
+        nReminders++;
+      }
+
+      for (final r in instances) {
+        if (_isDeletedRow(r)) continue;
+        final newReminderId = reminderIdMap[r['reminder_id']];
+        if (newReminderId == null) continue;
+        await txn.insert('reminder_instances', {
+          ..._pick(r, cols['reminder_instances']!),
+          'id': uuid(),
+          'reminder_id': newReminderId,
+          'is_deleted': 0,
+          'deleted_with_pet': 0,
+          'deleted_with_reminder': 0,
+        });
+        nInstances++;
+      }
+    });
+    DataVersion.bump();
+
+    return ImportSummary(
+      pets: nPets,
+      diaries: nDiaries,
+      images: nImages,
+      tags: nTags,
+      reminders: nReminders,
+      instances: nInstances,
+      skippedMedia: skippedMedia,
+    );
+  }
+
+  static List<Map<String, dynamic>> _rowsOf(dynamic v) => v is List
+      ? v.whereType<Map>().map((e) => e.cast<String, dynamic>()).toList()
+      : const [];
+
+  static bool _isDeletedRow(Map<String, dynamic> r) =>
+      ((r['is_deleted'] as int?) ?? 0) == 1;
+
+  /// 只保留目标表真实存在的列（跨版本导入的兼容层）。
+  static Map<String, dynamic> _pick(
+    Map<String, dynamic> row,
+    Set<String> cols,
+  ) => {
+    for (final e in row.entries)
+      if (cols.contains(e.key)) e.key: e.value,
+  };
+
+  /// 兼容旧调用：导出纯 JSON 文件（不含媒体）。新代码请用 buildExportMap + backup_service。
+  static Future<String> exportToJson() async {
+    final data = await buildExportMap();
     final dir = Directory(p.join((await getDatabasesPath()), 'exports'));
     if (!await dir.exists()) {
       await dir.create(recursive: true);
@@ -3527,6 +3725,35 @@ class Tag {
         color: color ?? this.color,
         createdAt: createdAt ?? this.createdAt,
       );
+}
+
+/// 导入结果统计（给用户如实回执：恢复了多少、跳过了多少）。
+class ImportSummary {
+  final int pets;
+  final int diaries;
+  final int images;
+  final int tags;
+  final int reminders;
+  final int instances;
+  final int skippedMedia;
+
+  const ImportSummary({
+    required this.pets,
+    required this.diaries,
+    required this.images,
+    required this.tags,
+    required this.reminders,
+    required this.instances,
+    required this.skippedMedia,
+  });
+
+  /// 是否什么都没导入（用来给「这份备份是空的 / 格式不对」的提示）。
+  bool get isEmpty =>
+      pets == 0 &&
+      diaries == 0 &&
+      tags == 0 &&
+      reminders == 0 &&
+      instances == 0;
 }
 
 class Reminder {
