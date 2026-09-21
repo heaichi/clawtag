@@ -1,86 +1,86 @@
-# 爪札 · ClawTag
+<div align="center">
 
-> 本地优先、完全离线的宠物日记 App。数据只存在你自己的手机上，不联网、不上传、无账号。
+# ClawTag · 爪札
 
-<p align="center">
-  <em>A local-first, fully offline pet diary app for Android & iOS.</em><br>
-  <em>Your data never leaves your phone — no account, no cloud, no tracking.</em>
-</p>
+**A local-first, fully offline pet diary for Android and iOS.**
 
-## 功能
+Your data stays on your phone — no account, no cloud, no tracking.
 
-| 模块 | 内容 |
-|---|---|
-| 🐾 宠物档案 | 多宠物：照片、品种、生日、体重、相识日期；列表与详情显示年龄阶段（猫狗分幼年/成年/老年） |
-| 📝 图文爪札 | 标题 + 内容 + 最多 9 张照片/视频、心情、天气、标签；纯媒体爪札允许空标题/空内容；详情页媒体支持全屏左右滑动 |
-| 🎬 视频播放 | 自动播放、常驻进度条、点击滑出 B 站风格控制条（播放/暂停、进度拖拽、时间、横竖屏全屏） |
-| 🔔 智能提醒 | 疫苗 / 驱虫 / 洗澡 / 美容 / 体检 / 自定义；周期重复、精确闹钟本地通知（标题含宠物名与第 N 次） |
-| 💊 用药疗程 | 一条药 =「每天 1~4 次 × 连续 N 天」；卡片显示「第 N/M 天 · 今日 X/Y 次 · 下次 HH:mm」；点开可勾选服药；漏服留痕不静默；通知按次推送、只滚动排未来 7 天 |
-| 🗑 最近删除 | 提醒 / 爪札 / 宠物的软删除与恢复、撤销、彻底删除；级联删除与联动恢复 |
-| 👤 我的 | 数据统计、深色模式、标签管理、数据导出（JSON） |
-| 🔮 宠物算命 | 规划中，独立目录 `lib/fortune/`（暂未创建） |
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Release](https://img.shields.io/github/v/release/heaichi/clawtag)](https://github.com/heaichi/clawtag/releases)
+[![Flutter](https://img.shields.io/badge/Flutter-3.44-02569B.svg)](https://flutter.dev)
 
-## 技术栈
+[中文说明](README.zh-CN.md)
 
-- Flutter 3.44 / Dart 3.12
-- sqflite（本地 SQLite，版本化迁移，只增不删 + 旧数据回填）
-- Provider（状态管理）、flutter_local_notifications（本地通知）、image_picker / video_player
-- 无后端、无网络请求（除应用商店/系统组件自身）
+</div>
 
-## 构建与运行
+---
+
+## Features
+
+- **Pet profiles** — photos, breed, birthday, weight and adoption date, with automatic age stages for cats and dogs.
+- **Photo & video diary** — up to nine attachments per entry, plus mood, weather and tags.
+- **Smart reminders** — vaccines, deworming, grooming, vet visits or custom, with reliable local notifications.
+- **Medication courses** — follow a multi-day course and check off every dose as you give it.
+- **Recently deleted** — undo a deletion and restore reminders, diary entries or pets.
+- **Data export** — export everything to a JSON file you own.
+- **Dark mode** and a small, dependency-light codebase.
+
+## Install
+
+Download the latest APK from the [Releases](https://github.com/heaichi/clawtag/releases) page and install it on your device. Android 7.0 (API 24) or newer.
+
+## Build from source
 
 ```bash
 flutter pub get
-flutter analyze          # 必须 0 issues
-flutter test             # 单元 + 组件测试，必须全绿
-
-# 日常迭代：真机 Debug 热重载（改代码按 r 秒级生效，不升版本号）
-flutter run -d <serial>
-
-# 发布/验收：出包 + 覆盖安装
-scripts\build.bat        # 只出 arm64 单包（最快）
-scripts\build.bat full   # 分发包：arm64 + armeabi-v7a
-adb install -r <apk>     # 覆盖安装，保留数据
+flutter analyze          # must report 0 issues
+flutter test             # unit, database, widget and layout tests
+flutter run -d <device>  # debug build with hot reload
 ```
 
-- 版本号唯一来源是 `pubspec.yaml` 的 `version:`（`x.y.z+N`，N = versionCode）；`build.bat` 会自动递增并同步 `lib/core/utils/version.dart`。
-- release 签名需自备：在 `android/key.properties` 指向你自己的 keystore（该文件与 `*.jks` 均已在 `.gitignore` 中，不会入库）。没有配置时会退回 debug 签名。
-- 更新安装务必用 `adb install -r` 覆盖，**不要卸载**（卸载会清空数据库与照片）。
+Release builds:
 
-## 项目结构
+```bash
+scripts/build.bat        # arm64 only (fastest)
+scripts/build.bat full   # universal APK: armv7 + arm64
+```
+
+Release signing reads `android/key.properties`; the file and any `*.jks` are git-ignored. Without them the build falls back to the debug keystore.
+
+## Tech stack
+
+| | |
+|---|---|
+| Framework | Flutter 3.44 / Dart 3.12 |
+| Storage | sqflite (SQLite) with versioned, additive migrations |
+| State | Provider |
+| Platform | flutter_local_notifications, image_picker, video_player, permission_handler |
+
+No backend, no analytics, no third-party network calls.
+
+## Privacy
+
+- All records live in the app's private SQLite database and file directory on your device.
+- Camera, photo library and microphone access are used only when you attach media.
+- Notification permission is used only for the reminders you create.
+- Uninstalling the app removes its data, so export a backup first.
+
+## Project layout
 
 ```
 lib/
-├── main.dart / app.dart            入口与根组件
-├── core/
-│   ├── database/app_database.dart  sqflite 单例 + 版本化迁移
-│   ├── theme/                      设计 token / 主题 / 深色模式
-│   └── utils/                      路由、格式化、SnackBar、UUID、年龄、用药疗程纯函数
-├── screens/                        宠物 / 爪札 / 提醒 / 我的 + 最近删除 + 标签管理
-├── widgets/                        卡片与复用组件
-└── services/                       图片、权限、提醒调度
-test/                               单元 / 数据库 / 组件 / 布局测试
-android/ · ios/                     平台工程
-scripts/                            版本号与打包脚本
+├── core/        database, theme, pure utilities
+├── screens/     pet, diary, reminder, settings screens
+├── widgets/     reusable cards and components
+└── services/    media, permissions, notification scheduling
+test/            unit, database, widget and layout tests
 ```
 
-## 设计原则
+## Contributing
 
-1. **本地优先**：所有数据在设备本地 SQLite；无账号、无上传、无统计 SDK。
-2. **数据不丢**：数据库迁移只增不删，旧数据回填；删除一律软删 + 最近删除可恢复。
-3. **完成由人确认**：提醒不做任何自动完成；逾期如实显示「已逾期 N 天」。
-4. **异常降级**：通知/媒体等集成点异常一律 catch 后降级，不阻塞核心记录流程。
+Issues and pull requests are welcome. Please keep `flutter analyze` clean and `flutter test` green.
 
-## 隐私
+## License
 
-- 应用不收集、不上传任何个人数据；导出的 JSON 由用户自行保管。
-- 相机/相册/麦克风权限仅用于拍摄与选择爪札媒体；通知权限仅用于提醒。
-
-## 许可
-
-MIT License，见 [LICENSE](LICENSE)。
-
-## 说明
-
-- 仓库名 `clawtag` 只是英文标识（GitHub 不便用中文）；应用内显示名仍为「爪札」。
-- Fork 后请自行修改 `android/app/build.gradle.kts` 的 `applicationId` 与 iOS Bundle Identifier，避免与官方包名冲突。
+[MIT](LICENSE)

@@ -300,7 +300,7 @@ class AppDatabase {
   }
 
   /// V11 (2026-08-09): 可选模块注册表（插口）。
-  /// 供未来「喵星崛起」「宠物算命」等模块登记启用状态，避免硬编码。
+  /// 供未来的可选模块登记启用状态，避免把模块开关硬编码进业务代码。
   static Future<void> _migrateV10ToV11(
     Database db,
     int oldVersion,
