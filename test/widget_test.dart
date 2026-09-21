@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 
-import 'package:pet_diary/app.dart';
-import 'package:pet_diary/core/theme/theme_provider.dart';
+import 'package:clawtag/app.dart';
+import 'package:clawtag/core/theme/theme_provider.dart';
 
 void main() {
   testWidgets('App renders without crashing', (WidgetTester tester) async {

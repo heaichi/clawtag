@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:pet_diary/core/database/app_database.dart';
-import 'package:pet_diary/core/utils/medication_course.dart';
-import 'package:pet_diary/core/utils/uuid.dart';
-import 'package:pet_diary/services/reminder_service.dart';
+import 'package:clawtag/core/database/app_database.dart';
+import 'package:clawtag/core/utils/medication_course.dart';
+import 'package:clawtag/core/utils/uuid.dart';
+import 'package:clawtag/services/reminder_service.dart';
 
 /// 用药通知调度：一实例一通知 ID + 7 天滚动窗口。
 ///
@@ -69,7 +69,7 @@ void main() {
     final ok = await scheduleDoseNotification(
       reminder: _med(days: 2, times: const [540]),
       instance: _dose('d1', _d(2026, 9, 18, 9)),
-      petName: '团团',
+      petName: '四筒',
       dayNumber: 1,
       doseOfDay: 1,
       remainingToday: 1,

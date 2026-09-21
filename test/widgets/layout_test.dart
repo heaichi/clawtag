@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:pet_diary/core/database/app_database.dart';
-import 'package:pet_diary/core/theme/app_theme.dart';
-import 'package:pet_diary/widgets/diary_card.dart';
-import 'package:pet_diary/widgets/empty_state.dart';
-import 'package:pet_diary/widgets/pet_card.dart';
-import 'package:pet_diary/widgets/reminder_card.dart';
+import 'package:clawtag/core/database/app_database.dart';
+import 'package:clawtag/core/theme/app_theme.dart';
+import 'package:clawtag/widgets/diary_card.dart';
+import 'package:clawtag/widgets/empty_state.dart';
+import 'package:clawtag/widgets/pet_card.dart';
+import 'package:clawtag/widgets/reminder_card.dart';
 
 /// 关键卡片的“尺寸 / 深色模式”适配回归：
 /// 在多种机宽下渲染，任何 RenderFlex overflow 都会让用例失败，

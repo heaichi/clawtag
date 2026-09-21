@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:pet_diary/core/database/app_database.dart';
-import 'package:pet_diary/core/utils/medication_course.dart';
+import 'package:clawtag/core/database/app_database.dart';
+import 'package:clawtag/core/utils/medication_course.dart';
 
 DateTime _d(int y, int m, int day, [int h = 9, int min = 0]) =>
     DateTime(y, m, day, h, min);
@@ -254,12 +254,12 @@ void main() {
   test('通知文案：第4天第2次 / 今日还剩次数', () {
     expect(
       buildDoseNotificationTitle(
-        petName: '团团',
+        petName: '四筒',
         medicineName: '阿莫西林',
         dayNumber: 4,
         doseOfDay: 2,
       ),
-      '团团 · 阿莫西林（第4天 第2次）',
+      '四筒 · 阿莫西林（第4天 第2次）',
     );
     expect(
       buildDoseNotificationTitle(

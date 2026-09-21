@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:pet_diary/services/reminder_service.dart';
+import 'package:clawtag/services/reminder_service.dart';
 
 /// 重复提醒「下一次到期时间」的纯函数测试。
 ///

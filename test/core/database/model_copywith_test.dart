@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:pet_diary/core/database/app_database.dart';
+import 'package:clawtag/core/database/app_database.dart';
 
 void main() {
   group('Diary.copyWith 清空语义（审计回归：体重/心情/天气可清空）', () {

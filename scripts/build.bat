@@ -19,8 +19,9 @@ setlocal
 cd /d "%~dp0.."
 
 REM --- JAVA_HOME guard -------------------------------------------------------
-REM Gradle needs a JDK 17+. If JAVA_HOME is unset or stale, set it before running
-REM this script (e.g. set JAVA_HOME=C:\path\to\jdk-17) — the error below tells you.
+REM Machine-level JAVA_HOME may point at a missing Android Studio JBR (this PC does).
+REM Fall back to a known-good JDK so Gradle never dies with "invalid JAVA_HOME".
+if not exist "%JAVA_HOME%\bin\java.exe" set "JAVA_HOME=C:\tools\java\jdk-17.0.19+10"
 if not exist "%JAVA_HOME%\bin\java.exe" (
   echo ERROR: no usable JDK found. Point JAVA_HOME at a JDK 17+ directory.
   exit /b 1
@@ -60,11 +61,11 @@ REM --- build -----------------------------------------------------------------
 call flutter build apk --release %TARGET_ARGS% --build-number %BUILD_NUMBER%
 if %ERRORLEVEL% neq 0 exit /b %ERRORLEVEL%
 
-REM --- friendly-named copy: pet_diary_<version>_<arch>_release.apk -------------
+REM --- friendly-named copy: clawtag_<version>_<arch>_release.apk -------------
 set OUTPUT_DIR=build\app\outputs\flutter-apk
-copy /Y "%OUTPUT_DIR%\app-release.apk" "%OUTPUT_DIR%\pet_diary_%NEW_VERSION%_%APK_TAG%_release.apk" >nul
+copy /Y "%OUTPUT_DIR%\app-release.apk" "%OUTPUT_DIR%\clawtag_%NEW_VERSION%_%APK_TAG%_release.apk" >nul
 if %ERRORLEVEL% neq 0 exit /b %ERRORLEVEL%
-set APK_PATH=%OUTPUT_DIR%\pet_diary_%NEW_VERSION%_%APK_TAG%_release.apk
+set APK_PATH=%OUTPUT_DIR%\clawtag_%NEW_VERSION%_%APK_TAG%_release.apk
 
 REM --- archive history + keep only the newest 5 -------------------------------
 REM Locale-independent timestamp (PowerShell, never %DATE%).
@@ -72,7 +73,7 @@ powershell -NoProfile -Command "Get-Date -Format 'yyyyMMdd_HHmm'" > "%TEMP%\petd
 for /f "usebackq delims=" %%t in ("%TEMP%\petdiary_ts.tmp") do set TIMESTAMP=%%t
 del "%TEMP%\petdiary_ts.tmp"
 if not exist "build\apk_history" mkdir "build\apk_history"
-set HISTORY_PATH=build\apk_history\pet_diary_%NEW_VERSION%_%APK_TAG%_release_%TIMESTAMP%.apk
+set HISTORY_PATH=build\apk_history\clawtag_%NEW_VERSION%_%APK_TAG%_release_%TIMESTAMP%.apk
 copy /Y "%APK_PATH%" "%HISTORY_PATH%" >nul
 if %ERRORLEVEL% neq 0 exit /b %ERRORLEVEL%
 for /f "skip=5 delims=" %%f in ('dir /b /o-d "build\apk_history\*.apk" 2^>nul') do del "build\apk_history\%%f" >nul 2>nul

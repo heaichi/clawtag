@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:path/path.dart' as p;
-import 'package:pet_diary/core/database/app_database.dart';
+import 'package:clawtag/core/database/app_database.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 /// 审计回归用例（2026-09-20 四个审计 agent 报告 + 主代理交叉验证）。

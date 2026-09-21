@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:pet_diary/core/database/app_database.dart';
-import 'package:pet_diary/core/utils/pet_age.dart';
+import 'package:clawtag/core/database/app_database.dart';
+import 'package:clawtag/core/utils/pet_age.dart';
 
 Pet _pet({
   required String species,

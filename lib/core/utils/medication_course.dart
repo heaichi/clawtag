@@ -276,7 +276,7 @@ String courseCardSubtitle({
   return buf.toString();
 }
 
-/// 服药通知标题：'团团 · 阿莫西林（第4天 第2次）'。
+/// 服药通知标题：'四筒 · 阿莫西林（第4天 第2次）'。
 String buildDoseNotificationTitle({
   required String petName,
   required String medicineName,

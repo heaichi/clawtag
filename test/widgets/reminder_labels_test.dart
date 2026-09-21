@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:pet_diary/widgets/care_record_row.dart';
-import 'package:pet_diary/core/theme/app_theme.dart';
-import 'package:pet_diary/core/utils/care_records.dart';
-import 'package:pet_diary/core/utils/formatters.dart';
-import 'package:pet_diary/screens/reminder_editor_screen.dart';
-import 'package:pet_diary/widgets/reminder_card.dart';
+import 'package:clawtag/widgets/care_record_row.dart';
+import 'package:clawtag/core/theme/app_theme.dart';
+import 'package:clawtag/core/utils/care_records.dart';
+import 'package:clawtag/core/utils/formatters.dart';
+import 'package:clawtag/screens/reminder_editor_screen.dart';
+import 'package:clawtag/widgets/reminder_card.dart';
 
 /// 待办相对时间与默认执行日期（本轮逻辑修正的回归锁）。
 void main() {

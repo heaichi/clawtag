@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:pet_diary/core/database/app_database.dart';
-import 'package:pet_diary/services/reminder_service.dart';
+import 'package:clawtag/core/database/app_database.dart';
+import 'package:clawtag/services/reminder_service.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 /// 恢复后重排通知的行为（docs/代码审计待办.md P2-10）。

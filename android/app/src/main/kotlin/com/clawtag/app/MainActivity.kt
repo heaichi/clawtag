@@ -1,4 +1,4 @@
-package com.heaichi.pet_diary
+package com.clawtag.app
 
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
@@ -9,7 +9,7 @@ class MainActivity : FlutterActivity() {
         super.configureFlutterEngine(flutterEngine)
         MethodChannel(
             flutterEngine.dartExecutor.binaryMessenger,
-            "com.heaichi.pet_diary/app"
+            "com.clawtag.app/app"
         ).setMethodCallHandler { call, result ->
             when (call.method) {
                 // 首页返回键：将 App 退到后台而非退出

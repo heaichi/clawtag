@@ -41,7 +41,7 @@
              release 构建会把它当作未使用资源删掉 → 每次排通知都 invalid_icon。
              （另见 res/raw/keep.xml） -->
         <meta-data
-            android:name="com.heaichi.pet_diary.notification_icon"
+            android:name="com.clawtag.app.notification_icon"
             android:resource="@drawable/ic_notification" />
 
         <!-- flutter_local_notifications 必需接收器：本地通知到点触发、按钮回调、开机重排 -->

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:pet_diary/core/database/app_database.dart';
-import 'package:pet_diary/core/theme/app_theme.dart';
-import 'package:pet_diary/widgets/reminder_card.dart';
+import 'package:clawtag/core/database/app_database.dart';
+import 'package:clawtag/core/theme/app_theme.dart';
+import 'package:clawtag/widgets/reminder_card.dart';
 
 void main() {
   final reminder = Reminder(
@@ -26,7 +26,7 @@ void main() {
         home: Scaffold(
           body: ReminderCard(
             reminder: reminder,
-            petName: '团团',
+            petName: '四筒',
             dueDate: DateTime(2026, 9, 20, 9),
             onHistory: () => tapped++,
           ),
@@ -36,7 +36,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('历史记录'), findsOneWidget);
-    expect(find.text('团团'), findsOneWidget);
+    expect(find.text('四筒'), findsOneWidget);
     await tester.tap(find.text('历史记录'));
     expect(tapped, 1);
   });

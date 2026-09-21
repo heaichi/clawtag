@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:pet_diary/core/database/app_database.dart';
+import 'package:clawtag/core/database/app_database.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 /// 批量查询的分片行为（docs/代码审计待办.md P2-6）。

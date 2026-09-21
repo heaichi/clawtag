@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:pet_diary/core/database/app_database.dart';
-import 'package:pet_diary/widgets/dose_picker.dart';
+import 'package:clawtag/core/database/app_database.dart';
+import 'package:clawtag/widgets/dose_picker.dart';
 
 /// 服药勾选弹层：今天/整个疗程视图、计数口径、勾选回调。
 
@@ -45,7 +45,7 @@ void main() {
         home: Scaffold(
           body: DosePickerSheet(
             reminder: _med(),
-            petName: '团团',
+            petName: '四筒',
             instances: instances,
             today: _d(2026, 9, 21),
             onComplete: (_, _) async {},
@@ -68,7 +68,7 @@ void main() {
         home: Scaffold(
           body: DosePickerSheet(
             reminder: _med(),
-            petName: '团团',
+            petName: '四筒',
             instances: instances,
             today: _d(2026, 9, 21),
             onComplete: (instance, at) async {
@@ -93,7 +93,7 @@ void main() {
         home: Scaffold(
           body: DosePickerSheet(
             reminder: _med(),
-            petName: '团团',
+            petName: '四筒',
             instances: [_dose('a', _d(2026, 9, 21, 8), no: 1)],
             today: _d(2026, 9, 21),
             onComplete: (_, _) async {},
@@ -119,7 +119,7 @@ void main() {
         home: Scaffold(
           body: DosePickerSheet(
             reminder: _med(),
-            petName: '团团',
+            petName: '四筒',
             instances: instances,
             today: _d(2026, 9, 21),
             onComplete: (_, _) async {},

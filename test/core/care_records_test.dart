@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:pet_diary/core/database/app_database.dart';
-import 'package:pet_diary/core/theme/app_theme.dart';
-import 'package:pet_diary/core/utils/care_records.dart';
-import 'package:pet_diary/services/reminder_service.dart';
-import 'package:pet_diary/widgets/reminder_history_sheet.dart';
+import 'package:clawtag/core/database/app_database.dart';
+import 'package:clawtag/core/theme/app_theme.dart';
+import 'package:clawtag/core/utils/care_records.dart';
+import 'package:clawtag/services/reminder_service.dart';
+import 'package:clawtag/widgets/reminder_history_sheet.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 /// 提醒历史 / 护理记录的装配（docs/开发进度看板.md 第六十八轮）。
@@ -208,7 +208,7 @@ void main() {
       await AppDatabase.insertPet(
         Pet(
           id: 'p1',
-          name: '团团',
+          name: '四筒',
           species: 'cat',
           meetDate: DateTime(2024, 1, 1),
           createdAt: DateTime(2024, 1, 1),

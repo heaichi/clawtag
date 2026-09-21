@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:path/path.dart' as p;
-import 'package:pet_diary/core/database/app_database.dart';
-import 'package:pet_diary/core/utils/medication_course.dart';
+import 'package:clawtag/core/database/app_database.dart';
+import 'package:clawtag/core/utils/medication_course.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 /// 用药疗程（Medication Course）的数据层与迁移回归。
@@ -16,7 +16,7 @@ DateTime _d(int y, int m, int day, [int h = 9]) => DateTime(y, m, day, h);
 
 Pet _pet(String id) => Pet(
   id: id,
-  name: '团团',
+  name: '四筒',
   species: 'cat',
   meetDate: _d(2024, 1, 1),
   createdAt: _d(2024, 1, 1),

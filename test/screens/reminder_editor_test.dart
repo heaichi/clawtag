@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:pet_diary/core/database/app_database.dart';
-import 'package:pet_diary/core/theme/app_theme.dart';
-import 'package:pet_diary/core/utils/formatters.dart';
-import 'package:pet_diary/screens/reminder_editor_screen.dart';
+import 'package:clawtag/core/database/app_database.dart';
+import 'package:clawtag/core/theme/app_theme.dart';
+import 'package:clawtag/core/utils/formatters.dart';
+import 'package:clawtag/screens/reminder_editor_screen.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 /// 提醒编辑器「第几次提醒 / 执行日期 / 上次执行日期」的显隐与联动（新功能）。

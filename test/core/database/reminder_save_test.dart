@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:pet_diary/core/database/app_database.dart';
+import 'package:clawtag/core/database/app_database.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 /// `saveReminderWithInstance`（事务化保存提醒 + 待办）回归测试。

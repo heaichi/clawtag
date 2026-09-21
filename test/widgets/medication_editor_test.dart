@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:pet_diary/core/database/app_database.dart';
-import 'package:pet_diary/core/theme/app_theme.dart';
-import 'package:pet_diary/core/utils/medication_course.dart';
-import 'package:pet_diary/screens/reminder_editor_screen.dart';
+import 'package:clawtag/core/database/app_database.dart';
+import 'package:clawtag/core/theme/app_theme.dart';
+import 'package:clawtag/core/utils/medication_course.dart';
+import 'package:clawtag/screens/reminder_editor_screen.dart';
 
 /// 编辑器「用药疗程」输入区：表单校验 + 互斥项隐藏。
 

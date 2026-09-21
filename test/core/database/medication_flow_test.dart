@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:pet_diary/core/database/app_database.dart';
-import 'package:pet_diary/core/utils/medication_course.dart';
-import 'package:pet_diary/core/utils/uuid.dart';
+import 'package:clawtag/core/database/app_database.dart';
+import 'package:clawtag/core/utils/medication_course.dart';
+import 'package:clawtag/core/utils/uuid.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 /// 用药疗程**端到端**用例：把设计文档 §10.1 的验收标准固化成自动化断言。
@@ -28,7 +28,7 @@ void main() {
     await AppDatabase.insertPet(
       Pet(
         id: 'p1',
-        name: '团团',
+        name: '四筒',
         species: 'cat',
         meetDate: _d(2024, 1, 1),
         createdAt: _d(2024, 1, 1),
@@ -113,12 +113,12 @@ void main() {
     expect(slot.doseIndex, 1);
     expect(
       buildDoseNotificationTitle(
-        petName: '团团',
+        petName: '四筒',
         medicineName: reminder.title,
         dayNumber: slot.dayIndex + 1,
         doseOfDay: slot.doseIndex + 1,
       ),
-      '团团 · 阿莫西林（第1天 第2次）',
+      '四筒 · 阿莫西林（第1天 第2次）',
     );
 
     // ── 5. 滚动窗口：只排未来 7 天，且不重复排已完成的

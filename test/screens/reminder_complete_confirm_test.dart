@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:pet_diary/core/database/app_database.dart';
-import 'package:pet_diary/core/theme/app_theme.dart';
-import 'package:pet_diary/screens/reminder_list_screen.dart';
-import 'package:pet_diary/widgets/reminder_card.dart';
+import 'package:clawtag/core/database/app_database.dart';
+import 'package:clawtag/core/theme/app_theme.dart';
+import 'package:clawtag/screens/reminder_list_screen.dart';
+import 'package:clawtag/widgets/reminder_card.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 /// 逾期项完成必须手动核对完成日期（第七十七轮）。
@@ -19,7 +19,7 @@ void main() {
     await AppDatabase.insertPet(
       Pet(
         id: 'p1',
-        name: '团团',
+        name: '四筒',
         species: 'cat',
         meetDate: DateTime(2024, 1, 1),
         createdAt: DateTime(2024, 1, 1),

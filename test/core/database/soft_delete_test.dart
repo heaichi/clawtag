@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:path/path.dart' as p;
-import 'package:pet_diary/core/database/app_database.dart';
+import 'package:clawtag/core/database/app_database.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 /// 软删除 / 恢复 / 最近删除 / 统计口径 的回归测试。

@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:pet_diary/services/permission_service.dart';
+import 'package:clawtag/services/permission_service.dart';
 
 /// 通知权限接口的降级与"查询/申请分离"契约测试。
 ///

@@ -743,7 +743,7 @@ class AppDatabase {
     // 有测试覆盖时不要调用 getDatabasesPath()（它会去创建真实目录）。
     final overridePath = debugDatabasePathOverride;
     final path =
-        overridePath ?? p.join(await getDatabasesPath(), 'pet_diary.db');
+        overridePath ?? p.join(await getDatabasesPath(), 'clawtag.db');
     return openDatabase(
       path,
       version: VERSION,
@@ -2975,7 +2975,7 @@ class AppDatabase {
       await dir.create(recursive: true);
     }
     final fileName =
-        'pet_diary_backup_${DateTime.now().millisecondsSinceEpoch}.json';
+        'clawtag_backup_${DateTime.now().millisecondsSinceEpoch}.json';
     final file = File(p.join(dir.path, fileName));
     await file.writeAsString(
       const JsonEncoder.withIndent('  ').convert(data),

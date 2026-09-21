@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:pet_diary/core/theme/app_theme.dart';
-import 'package:pet_diary/widgets/segmented_switch.dart';
+import 'package:clawtag/core/theme/app_theme.dart';
+import 'package:clawtag/widgets/segmented_switch.dart';
 
 void main() {
   testWidgets('两段切换：点击回调、选中态跟随', (tester) async {

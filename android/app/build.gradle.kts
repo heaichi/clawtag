@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.heaichi.pet_diary"
+    namespace = "com.clawtag.app"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -18,7 +18,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.heaichi.pet_diary"
+        applicationId = "com.clawtag.app"
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode

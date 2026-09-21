@@ -74,7 +74,7 @@ class _HomeScreenState extends State<HomeScreen> {
         if (!didPop) {
           // Minimize app to background instead of exiting
           try {
-            const channel = MethodChannel('com.heaichi.pet_diary/app');
+            const channel = MethodChannel('com.clawtag.app/app');
             channel.invokeMethod('moveToBackground').catchError((_) {});
           } catch (_) {}
         }
