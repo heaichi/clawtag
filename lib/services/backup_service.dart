@@ -110,10 +110,13 @@ Future<ImportSummary> importBackupFile(
     ArchiveFile? dataFile;
     for (final f in archive.files) {
       if (!f.isFile) continue;
-      if (f.name == backupDataEntryName) {
+      // 有些压缩工具（Windows 的 Compress-Archive 等）用反斜杠写条目名，
+      // 不归一化的话媒体会被全部当成「找不到文件」而跳过（真机上踩过）。
+      final name = f.name.replaceAll('\\', '/');
+      if (name == backupDataEntryName) {
         dataFile = f;
-      } else if (f.name.startsWith('media/')) {
-        mediaEntries[f.name] = f;
+      } else if (name.startsWith('media/')) {
+        mediaEntries[name] = f;
       }
     }
     if (dataFile == null) {

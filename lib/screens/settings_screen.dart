@@ -459,7 +459,7 @@ Future<void> _importData(
     builder: (ctx) => AlertDialog(
       title: const Text('导入备份'),
       content: const Text(
-        '备份里的宠物、爪札、提醒会被**追加**到现有数据中，不会覆盖或删除任何东西。\n\n'
+        '备份里的宠物、爪札、提醒会被追加到现有数据中，不会覆盖或删除任何东西。\n\n'
         '标签会按名称合并；照片视频会一起复制到本机。',
       ),
       actions: [
