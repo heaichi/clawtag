@@ -1,101 +1,100 @@
-# ClawTag 🐾 — the pet diary that stays on your phone
+# 爪札 ClawTag 🐾 —— 数据不出手机的宠物日记
 
 <p align="center">
-  <img src="docs/assets/logo.png" width="112" alt="ClawTag">
+  <img src="docs/assets/logo.png" width="112" alt="爪札 ClawTag">
 </p>
 
 <p align="center">
   <a href="https://github.com/heaichi/clawtag/releases"><img src="https://img.shields.io/github/v/release/heaichi/clawtag?style=flat-square&label=release" alt="Release"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-green?style=flat-square" alt="License: MIT"></a>
-  <img src="https://img.shields.io/badge/platform-Android%20%7C%20iOS-3DDC84?style=flat-square" alt="Platform: Android and iOS">
+  <img src="https://img.shields.io/badge/platform-Android%20%7C%20iOS-3DDC84?style=flat-square" alt="Android 与 iOS">
   <a href="https://flutter.dev"><img src="https://img.shields.io/badge/Flutter-3.44-02569B?style=flat-square&logo=flutter" alt="Flutter 3.44"></a>
-  <a href="../../issues"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen?style=flat-square" alt="PRs welcome"></a>
 </p>
 
-<p align="center"><a href="README.zh-CN.md">中文说明</a></p>
+<p align="center"><a href="README.en.md">English</a> · 中文</p>
 
-ClawTag is an offline-first pet diary for Android and iOS. It keeps the day-to-day of every animal you live with: profiles, photo and video entries, care reminders and medication courses. Flutter on the front, a local SQLite database underneath, and nothing in between.
+爪札是一款本地优先、完全离线的宠物日记 App（Android / iOS）。它记录你和宠物相处的日常：宠物档案、图文爪札、护理提醒与用药疗程。界面是 Flutter，底层是本地 SQLite，中间没有别的东西。
 
-**Yours, with no catch.** There is no account, no sign-in, no sync and no analytics. Everything ClawTag knows lives in the app's private database and file directory on your device. Nothing is uploaded, nothing is phoned home, and the only way data leaves the phone is an export you run yourself.
+**数据不出手机。** 没有账号、没有登录、没有同步、没有统计。爪札知道的一切都存在设备本地的数据库与文件目录里；不上传、不回传，数据唯一的出口是你自己执行的导出。
 
-## Install
+## 安装
 
-**Android** — download the latest APK from [Releases](https://github.com/heaichi/clawtag/releases) and install it. Android 7.0 (API 24) or newer; the published build is a single universal APK for armv7 and arm64.
+**Android** —— 到 [Releases](https://github.com/heaichi/clawtag/releases) 下载最新 APK 安装即可，需要 Android 7.0（API 24）及以上；发布的包是 armv7 + arm64 通用单包。
 
-**iOS** — there is no App Store build yet. Build from source (below); the Xcode project is in `ios/`.
+**iOS** —— 暂未上架 App Store，请从源码构建（见下），Xcode 工程在 `ios/`。
 
-## Quick start
+## 快速上手
 
-1. **Add a pet** — photo, species, birthday, adoption date.
-2. **Write an entry** — text, up to nine photos or videos, mood, weather, tags.
-3. **Create a reminder** — pick a type such as vaccine, deworming or vet visit, then a date.
-4. **Optional:** switch on *medication course* to follow a multi-day prescription and tick off each dose.
+1. **添加宠物** —— 照片、物种、生日、相识日期。
+2. **写一篇爪札** —— 文字 + 最多 9 张照片或视频，可记心情、天气与标签。
+3. **建一条提醒** —— 选疫苗、驱虫、体检等类型，再选日期。
+4. **可选**：打开「用药疗程」，按医生要求的疗程逐次勾选喂药。
 
-Everything you delete lands in **Recently deleted**, where it can be restored.
+删掉的任何东西都会进「最近删除」，随时可以恢复。
 
-## What's inside
+## 功能
 
 | | |
 |---|---|
-| 🐾 **Pet profiles** | Photos, breed, birthday, weight and adoption date, with automatic age stages for cats and dogs |
-| 📝 **Photo & video diary** | Up to nine attachments per entry, plus mood, weather and tags |
-| 🔔 **Care reminders** | Vaccines, deworming, grooming, vet visits or custom, on a repeating schedule |
-| 💊 **Medication courses** | One medicine, several doses a day, across as many days as the prescription says |
-| 🗑 **Recently deleted** | Every deletion is reversible — reminders, entries and pets |
-| 🎬 **Built-in player** | Videos play inline, full screen, portrait or landscape |
-| 📤 **Data export** | Write everything out to a JSON file you own |
-| 🌙 **Dark mode** | Follows the system, or pick light or dark yourself |
+| 🐾 **宠物档案** | 照片、品种、生日、体重、相识日期，自动计算猫狗年龄阶段 |
+| 📝 **图文爪札** | 每篇最多 9 张照片或视频，可记心情、天气与标签 |
+| 🔔 **护理提醒** | 疫苗、驱虫、洗澡、体检或自定义，按周期循环提醒 |
+| 💊 **用药疗程** | 一种药、一天多次、按处方天数坚持到底 |
+| 🗑 **最近删除** | 提醒、爪札、宠物都能找回 |
+| 🎬 **内置播放器** | 视频内嵌播放，支持横竖屏全屏 |
+| 📤 **数据导出** | 导出为属于你自己的 JSON 文件 |
+| 🌙 **深色模式** | 跟随系统，也可手动指定 |
 
-## How it works
+## 实现要点
 
-- **Flutter 3.44 / Dart 3.12**, single codebase for Android and iOS.
-- **sqflite** — one local SQLite database. Migrations are additive only: the schema never loses a column, and upgrades backfill existing rows, so an update never costs you data.
-- **Deletes are soft.** A removed record keeps its history and waits in *Recently deleted* until you restore it or delete it for good.
-- **Completion is never automatic.** A reminder is only done when you say it is done; overdue items keep their real date and keep reminding you.
-- **Notifications are local.** Exact alarms are requested when the system allows it and fall back to inexact scheduling when it does not — a missing permission degrades the reminder instead of breaking the app.
-- **No backend.** The app never opens a socket. Third-party packages are limited to notifications, media picking, video playback and permissions.
+- **Flutter 3.44 / Dart 3.12**，一套代码同时构建 Android 与 iOS。
+- **sqflite** —— 本地 SQLite 单库。迁移只增不删：表结构从不丢列，升级时把旧数据回填，更新永远不会让你的数据消失。
+- **删除都是软删除**。记录保留历史，在「最近删除」里等你恢复或彻底删除。
+- **完成从不自动发生**。提醒只有你确认才算完成；逾期项保留真实日期，并持续提醒。
+- **通知完全本地**。系统允许时使用精确闹钟，不允许时自动退回非精确调度——权限缺失只会让提醒降级，不会让 App 出错。
+- **没有后端**。应用不主动建立任何网络连接；第三方依赖仅限通知、取图、视频播放与权限。
 
-## Privacy
+## 隐私
 
-- Records live in the app's private SQLite database and file directory.
-- Camera, photo library and microphone are used only when you attach media.
-- Notification permission is used only for the reminders you create.
-- **Uninstalling removes the data.** Export a backup first if it matters to you.
+- 所有记录存放在应用私有的 SQLite 数据库与文件目录中。
+- 相机、相册、麦克风权限仅在你添加媒体时使用。
+- 通知权限仅用于你自己创建的提醒。
+- **卸载会删除数据**，重要的话请先导出备份。
 
-## Build from source
+## 从源码构建
 
 ```bash
 flutter pub get
-flutter analyze          # must report 0 issues
-flutter test             # unit, database, widget and layout tests
-flutter run -d <device>  # debug build with hot reload
+flutter analyze          # 必须 0 issues
+flutter test             # 单元 / 数据库 / 组件 / 布局测试
+flutter run -d <device>  # Debug 构建 + 热重载
 ```
 
-Release builds:
+发布构建：
 
 ```bash
-scripts/build.bat        # arm64 only (fastest)
-scripts/build.bat full   # universal APK: armv7 + arm64
+scripts/build.bat        # 仅 arm64（最快）
+scripts/build.bat full   # 通用包：armv7 + arm64
 ```
 
-Signing reads `android/key.properties`; the file and any `*.jks` are git-ignored, and the build falls back to the debug keystore when they are absent. Forks should change `applicationId` in `android/app/build.gradle.kts` and the bundle identifier in `ios/Runner.xcodeproj`.
+release 签名读取 `android/key.properties`，该文件与 `*.jks` 均已忽略；未配置时退回 debug 签名。Fork 时请自行修改 `android/app/build.gradle.kts` 的 `applicationId` 与 iOS 工程的 Bundle Identifier。
 
-## Project layout
+## 目录结构
 
 ```
 lib/
-├── core/        database, theme, pure utilities
-├── screens/     pet, diary, reminder and settings screens
-├── widgets/     reusable cards and components
-└── services/    media, permissions, notification scheduling
-test/            unit, database, widget and layout tests
-android/ ios/    platform projects
+├── core/        数据库、主题、纯函数工具
+├── screens/     宠物 / 爪札 / 提醒 / 我的 页面
+├── widgets/     复用卡片与组件
+└── services/    媒体、权限、通知调度
+test/            单元 / 数据库 / 组件 / 布局测试
+android/ ios/    平台工程
 ```
 
-## Contributing
+## 参与贡献
 
-Issues and pull requests are welcome. Before opening a PR, please make sure `flutter analyze` is clean and `flutter test` passes; the test suite covers the database invariants (soft deletes, cascades, migrations) and the layout of every card on small and large screens.
+欢迎提 issue 与 PR。提 PR 前请确认 `flutter analyze` 无告警、`flutter test` 全绿——测试覆盖了数据库不变式（软删除、级联、迁移）以及各种屏幕宽度下的卡片布局。
 
-## License
+## 许可
 
 [MIT](LICENSE) © heaichi
