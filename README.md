@@ -93,7 +93,7 @@ android/ ios/    平台工程
 
 ## 参与贡献
 
-欢迎提 issue 与 PR。提 PR 前请确认 `flutter analyze` 无告警、`flutter test` 全绿——测试覆盖了数据库不变式（软删除、级联、迁移）以及各种屏幕宽度下的卡片布局。
+欢迎提 issue 与 PR（规则见 [CONTRIBUTING.md](CONTRIBUTING.md)）。提 PR 前请确认 `flutter analyze` 无告警、`flutter test` 全绿——测试覆盖了数据库不变式（软删除、级联、迁移）以及各种屏幕宽度下的卡片布局。
 
 ## 许可
 
