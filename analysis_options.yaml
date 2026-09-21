@@ -1,0 +1,28 @@
+# Static analysis configuration for the 爪札 project.
+#
+# Includes the recommended Flutter lint set and adds stricter rules for
+# commercial-grade code quality.  Run `flutter analyze` to validate.
+
+include: package:flutter_lints/flutter.yaml
+
+linter:
+  rules:
+    # ----- Code quality -----
+    - prefer_const_constructors
+    - prefer_const_declarations
+    - prefer_const_literals_to_create_immutables
+    - avoid_print
+    - avoid_unnecessary_containers
+    - prefer_single_quotes
+    - sort_child_properties_last
+
+    # ----- Safety -----
+    - use_key_in_widget_constructors
+    - avoid_empty_else
+    - cancel_subscriptions
+
+    # ----- Idiomatic Dart -----
+    - prefer_final_locals
+    - prefer_final_in_for_each
+    - unnecessary_late
+    - avoid_returning_null_for_void

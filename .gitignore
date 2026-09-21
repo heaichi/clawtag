@@ -1,0 +1,61 @@
+# Flutter
+**/build/
+**/ios/.symlinks/
+**/ios/Pods/
+**/.packages
+**/.dart_tool/
+**/flutter_export_environment.sh
+.dart_tool/
+.packages
+build/
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+*.swp
+
+# Claude
+.claude/*
+!.claude/skills/
+!.claude/skills/**
+
+# Android
+**/android/.gradle/
+**/android/local.properties
+**/android/key.properties
+**/android/app/google-services.json
+
+# iOS
+**/ios/Pods/
+**/ios/.symlinks/
+**/ios/Flutter/Flutter.framework
+**/ios/Flutter/Flutter.podspec
+**/ios/Flutter/.last_build_id
+
+# Firebase
+*.firebase*
+
+# ENV
+.env
+.env.local
+*.env
+.flutter-plugins-dependencies
+*.aar
+android/.kotlin/
+
+# Project local artifacts
+*.log
+/*.png
+/*.jpg
+/*.jpeg
+
+# Signing keys
+**/*.jks

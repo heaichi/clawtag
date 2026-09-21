@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  运行期按**名字**查找的资源必须显式保留：
+  flutter_local_notifications 用 getIdentifier("ic_notification", "drawable", pkg) 取图标，
+  静态分析看不到任何引用 → release 构建会把 drawable/ic_notification 删掉，
+  结果是每次 zonedSchedule 都抛 invalid_icon，**所有提醒都不响**（真机上踩过）。
+-->
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:keep="@drawable/ic_notification,@drawable/ic_launcher_background" />

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  爪札 — Commercial app icon
+  札 (note)     = notebook with bookmark ribbon
+  爪 (claw/paw) = elegant paw print centered on the cover
+  Palette: background #8B5E7A (plum), foreground white, paw #8B5E7A
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!--
+      Notebook body (札)
+      Clean rounded rectangle with a slight page-thickness effect
+    -->
+    <!-- Page stack (underneath cover) — light cloud color -->
+    <path
+        android:fillColor="#E8E4DD"
+        android:pathData="M30,18 L82,18 L82,90 L30,90Z" />
+
+    <!-- Notebook cover — white -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M28,20 L80,20 C82.76,20 85,22.24 85,25 L85,83 C85,85.76 82.76,88 80,88 L28,88 C25.24,88 23,85.76 23,83 L23,25 C23,22.24 25.24,20 28,20Z" />
+
+    <!-- Spine / binding highlight — subtle plum tint -->
+    <path
+        android:fillColor="#F0ECE8"
+        android:pathData="M28,20 L32,20 L32,88 L28,88Z" />
+
+    <!-- Bookmark ribbon — elegant fabric-like drape -->
+    <path
+        android:fillColor="#C9B2C0"
+        android:pathData="M63,20 L69,20 L69,96 L66,91 L63,96Z" />
+
+    <!--
+      Page lines — very subtle, like premium stationery
+    -->
+    <path
+        android:strokeWidth="0.7"
+        android:strokeColor="#E8E4DD"
+        android:pathData="M40,35 L77,35" />
+    <path
+        android:strokeWidth="0.7"
+        android:strokeColor="#E8E4DD"
+        android:pathData="M40,43 L77,43" />
+    <path
+        android:strokeWidth="0.7"
+        android:strokeColor="#E8E4DD"
+        android:pathData="M40,51 L77,51" />
+    <path
+        android:strokeWidth="0.7"
+        android:strokeColor="#E8E4DD"
+        android:pathData="M40,59 L60,59" />
+
+    <!--
+      Paw print (爪) — centered, clean, geometric
+      Main pad: symmetrical teardrop
+    -->
+    <path
+        android:fillColor="#8B5E7A"
+        android:pathData="M54,72.5 C54,72.5 47,79 54,84 C61,79 54,72.5 54,72.5Z" />
+
+    <!-- Toe 1 — left-most, slightly smaller -->
+    <path
+        android:fillColor="#8B5E7A"
+        android:pathData="M42.5,58.5 C41,55 37.5,53.5 39,57 C40.5,60.5 44,62 42.5,58.5Z" />
+
+    <!-- Toe 2 — inner left -->
+    <path
+        android:fillColor="#8B5E7A"
+        android:pathData="M49.5,54 C48.5,50.5 45.5,49 46.5,52.5 C47.5,56 50.5,57.5 49.5,54Z" />
+
+    <!-- Toe 3 — inner right -->
+    <path
+        android:fillColor="#8B5E7A"
+        android:pathData="M58.5,54 C59.5,50.5 62.5,49 61.5,52.5 C60.5,56 57.5,57.5 58.5,54Z" />
+
+    <!-- Toe 4 — right-most, slightly smaller -->
+    <path
+        android:fillColor="#8B5E7A"
+        android:pathData="M65.5,58.5 C67,55 70.5,53.5 69,57 C67.5,60.5 64,62 65.5,58.5Z" />
+</vector>
